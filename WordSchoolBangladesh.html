@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordSchoolBangladesh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563EB;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --bg: #F0F9FF;
+            --card-bg: #ffffff;
+            --text: #1F2937;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h1 { margin: 0; font-size: 22px; color: var(--primary); }
+
+        .streak-badge {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .controls-card {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #F3F4F6;
+            padding: 5px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+            background: transparent;
+            color: #6B7280;
+        }
+
+        .tab-btn.active {
+            background-color: white;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .selectors {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #E5E7EB;
+            font-family: inherit;
+            font-size: 12px;
+        }
+
+        /* --- FLASHCARD --- */
+        .flashcard-container {
+            perspective: 1000px;
+            width: 100%;
+            height: 320px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+            background: white;
+            text-align: center;
+        }
+
+        .card-front { background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%); }
+        .card-front h2 { font-size: 32px; color: var(--primary); margin: 0; }
+        .tap-hint { font-size: 12px; color: #9CA3AF; margin-top: 20px; text-transform: uppercase; }
+
+        .card-back {
+            background: linear-gradient(135deg, #fff 0%, #ecfdf5 100%);
+            transform: rotateY(180deg);
+            border: 2px solid var(--secondary);
+        }
+
+        .bn-meaning { font-size: 28px; font-weight: bold; color: var(--text); margin-bottom: 10px; }
+        .synonyms-box { background: rgba(255,255,255,0.6); padding: 10px; border-radius: 8px; color: #4B5563; font-size: 14px; margin-bottom: 10px; }
+        .example-box { font-size: 13px; font-style: italic; color: #6B7280; line-height: 1.4; }
+
+        .card-controls { display: flex; justify-content: space-between; align-items: center; }
+        .nav-btn { background: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 600; color: var(--primary); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); cursor: pointer; }
+        .progress-text { font-size: 14px; color: #6B7280; }
+
+        /* --- QUIZ --- */
+        .quiz-container { background: white; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .quiz-question { font-size: 20px; margin-bottom: 25px; color: var(--text); }
+        .option-btn { width: 100%; background: white; border: 2px solid #E5E7EB; padding: 15px; margin-bottom: 10px; border-radius: 12px; text-align: left; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; }
+        .opt-bn { font-weight: bold; font-size: 16px; }
+        .opt-syn { font-size: 12px; color: #6B7280; margin-top: 2px;}
+        .option-btn.correct { background: #D1FAE5; border-color: var(--secondary); }
+        .option-btn.wrong { background: #FEE2E2; border-color: #EF4444; }
+
+        .hidden { display: none !important; }
+        .empty-state { text-align: center; padding: 40px; color: #9CA3AF; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>WordSchool<span style="color:var(--text)">BD</span></h1>
+        <div class="streak-badge"><span>🔥</span><span id="streak-display">0 Days</span></div>
+    </header>
+
+    <div class="app-container">
+        <div class="controls-card">
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="setMode('study')">📖 Study</button>
+                <button class="tab-btn" onclick="setMode('quiz')">📝 Quiz</button>
+            </div>
+            <div class="selectors">
+                <select id="class-select" onchange="updateUnits()">
+                    <option value="">Class</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+                <select id="unit-select" onchange="updateLessons()">
+                    <option value="">Unit</option>
+                </select>
+                <select id="lesson-select" onchange="loadContent()">
+                    <option value="">Lesson</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Study Mode -->
+        <div id="study-mode">
+            <div id="flashcard-area" class="hidden">
+                <div class="flashcard-container" onclick="flipCard()">
+                    <div class="flashcard" id="active-card">
+                        <div class="card-face card-front">
+                            <h2 id="fc-en">Word</h2>
+                            <div class="tap-hint">Tap to flip</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="bn-meaning" id="fc-bn">অর্থ</div>
+                            <div class="synonyms-box" id="fc-syn-container">
+                                <strong>Synonym/Definition:</strong><br><span id="fc-syn">...</span>
+                            </div>
+                            <div class="example-box" id="fc-ex-container">
+                                <strong>Example:</strong><br><span id="fc-ex">...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-controls">
+                    <button class="nav-btn" onclick="prevCard()">← Prev</button>
+                    <span class="progress-text" id="card-progress">0 / 0</span>
+                    <button class="nav-btn" onclick="nextCard()">Next →</button>
+                </div>
+            </div>
+            <div id="study-empty" class="empty-state">Select Class, Unit & Lesson to start!</div>
+        </div>
+
+        <!-- Quiz Mode -->
+        <div id="quiz-mode" class="hidden">
+            <div id="quiz-area" class="quiz-container hidden">
+                <div class="quiz-question" id="q-text">Question?</div>
+                <div id="options-list"></div>
+                <button id="next-q-btn" class="nav-btn hidden" style="width:100%; margin-top:20px; background:var(--primary); color:white" onclick="nextQuizQuestion()">Next Question</button>
+            </div>
+            <div id="quiz-empty" class="empty-state">Select Class, Unit & Lesson for Quiz!</div>
+        </div>
+    </div>
+
+    <!-- Import our Database File -->
+    <script src="database.js"></script>
+
+    <script>
+        let currentMode = 'study';
+        let currentList = [];
+        let cardIndex = 0;
+        let currentQuizItem = null;
+
+        function updateUnits() {
+            const cls = document.getElementById('class-select').value;
+            const unitSelect = document.getElementById('unit-select');
+            unitSelect.innerHTML = '<option value="">Unit</option>';
+            document.getElementById('lesson-select').innerHTML = '<option value="">Lesson</option>';
+            
+            if (vocabDatabase[cls]) {
+                Object.keys(vocabDatabase[cls]).forEach(u => {
+                    unitSelect.innerHTML += `<option value="${u}">${u}</option>`;
+                });
+            }
+        }
+
+        function updateLessons() {
+            const cls = document.getElementById('class-select').value;
+            const unit = document.getElementById('unit-select').value;
+            const lsnSelect = document.getElementById('lesson-select');
+            lsnSelect.innerHTML = '<option value="">Lesson</option>';
+            
+            if (vocabDatabase[cls] && vocabDatabase[cls][unit]) {
+                Object.keys(vocabDatabase[cls][unit]).forEach(l => {
+                    lsnSelect.innerHTML += `<option value="${l}">${l}</option>`;
+                });
+            }
+        }
+
+        function loadContent() {
+            const cls = document.getElementById('class-select').value;
+            const unit = document.getElementById('unit-select').value;
+            const lsn = document.getElementById('lesson-select').value;
+            
+            if (!cls || !unit || !lsn) return;
+
+            currentList = vocabDatabase[cls][unit][lsn];
+
+            if (currentMode === 'study') setupFlashcards();
+            else setupQuiz();
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('study-mode').classList.toggle('hidden', mode !== 'study');
+            document.getElementById('quiz-mode').classList.toggle('hidden', mode !== 'quiz');
+            loadContent();
+        }
+
+        function setupFlashcards() {
+            document.getElementById('study-empty').classList.add('hidden');
+            document.getElementById('flashcard-area').classList.remove('hidden');
+            cardIndex = 0;
+            renderCard();
+        }
+
+        function renderCard() {
+            const item = currentList[cardIndex];
+            const card = document.getElementById('active-card');
+            card.classList.remove('flipped');
+            setTimeout(() => {
+                document.getElementById('fc-en').innerText = item.en;
+                document.getElementById('fc-bn').innerText = item.bn;
+                document.getElementById('fc-syn').innerText = item.syn || "N/A";
+                document.getElementById('fc-ex').innerText = item.ex || "No example provided.";
+                document.getElementById('card-progress').innerText = `${cardIndex + 1} / ${currentList.length}`;
+            }, 150);
+        }
+
+        function flipCard() { 
+            document.getElementById('active-card').classList.toggle('flipped'); 
+            recordActivity();
+        }
+
+        function nextCard() { if (cardIndex < currentList.length - 1) { cardIndex++; renderCard(); } }
+        function prevCard() { if (cardIndex > 0) { cardIndex--; renderCard(); } }
+
+        function setupQuiz() {
+            document.getElementById('quiz-empty').classList.add('hidden');
+            document.getElementById('quiz-area').classList.remove('hidden');
+            nextQuizQuestion();
+        }
+
+        function nextQuizQuestion() {
+            document.getElementById('next-q-btn').classList.add('hidden');
+            const item = currentList[Math.floor(Math.random() * currentList.length)];
+            currentQuizItem = item;
+            document.getElementById('q-text').innerHTML = `Meaning of: <strong>${item.en}</strong>`;
+            
+            let options = [item];
+            let others = currentList.filter(i => i.en !== item.en).sort(() => Math.random() - 0.5).slice(0, 3);
+            options = options.concat(others).sort(() => Math.random() - 0.5);
+
+            const container = document.getElementById('options-list');
+            container.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span class="opt-bn">${opt.bn}</span><span class="opt-syn">(${opt.syn || '...'})</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                    if(opt.en === currentQuizItem.en) { btn.classList.add('correct'); recordActivity(); }
+                    else { btn.classList.add('wrong'); }
+                    document.getElementById('next-q-btn').classList.remove('hidden');
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function recordActivity() {
+            const today = new Date().toDateString();
+            const lastDate = localStorage.getItem('wsb_last_date');
+            if (lastDate !== today) {
+                let streak = parseInt(localStorage.getItem('wsb_streak') || 0);
+                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                streak = (lastDate === yesterday.toDateString()) ? streak + 1 : 1;
+                localStorage.setItem('wsb_streak', streak);
+                localStorage.setItem('wsb_last_date', today);
+                updateStreakDisplay();
+            }
+        }
+
+        function updateStreakDisplay() {
+            const s = localStorage.getItem('wsb_streak') || 0;
+            document.getElementById('streak-display').innerText = `${s} Days`;
+        }
+        
+        window.onload = updateStreakDisplay;
+    </script>
+</body>
+</html>
