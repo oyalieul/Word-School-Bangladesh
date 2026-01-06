@@ -2,385 +2,465 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WordSchoolBangladesh</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563EB;
+            --primary: #4F46E5;
             --secondary: #10B981;
             --accent: #F59E0B;
-            --bg: #F0F9FF;
-            --card-bg: #ffffff;
-            --text: #1F2937;
+            --danger: #EF4444;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-sub: #64748B;
+            --nav-height: 75px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Outfit', sans-serif;
             background-color: var(--bg);
-            color: var(--text);
+            color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
         }
 
+        /* --- Header --- */
         header {
-            width: 100%;
-            max-width: 600px;
+            background: var(--card);
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            flex-shrink: 0;
         }
 
-        h1 { margin: 0; font-size: 22px; color: var(--primary); }
+        .brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
 
-        .streak-badge {
-            background: white;
-            padding: 8px 16px;
-            border-radius: 50px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        .streak-chip {
+            background: #FFFBEB;
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            color: var(--accent);
-            font-size: 14px;
+            gap: 6px;
+            border: 1px solid #FEF3C7;
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .controls-card {
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .nav-tabs {
-            display: flex;
-            background: #F3F4F6;
-            padding: 5px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-
-        .tab-btn {
+        /* --- Scrollable Content Area --- */
+        main {
             flex: 1;
-            border: none;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.3s;
-            background: transparent;
-            color: #6B7280;
+            overflow-y: auto;
+            padding: 16px;
+            padding-bottom: calc(var(--nav-height) + 20px);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .tab-btn.active {
-            background-color: white;
-            color: var(--primary);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .selectors {
+        /* --- Custom Mobile Selectors --- */
+        .selector-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 8px;
+            margin-bottom: 20px;
         }
 
         select {
             width: 100%;
             padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+            background: var(--card);
             font-family: inherit;
-            font-size: 12px;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748B'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 14px;
         }
 
-        /* --- FLASHCARD --- */
-        .flashcard-container {
+        /* --- Flashcard --- */
+        .flashcard-wrapper {
             perspective: 1000px;
-            width: 100%;
-            height: 320px;
-            cursor: pointer;
+            height: 380px;
             margin-bottom: 20px;
         }
 
-        .flashcard {
+        .card {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
-            border-radius: 20px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
         }
 
-        .flashcard.flipped { transform: rotateY(180deg); }
+        .card.is-flipped { transform: rotateY(180deg); }
 
         .card-face {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 20px;
+            border-radius: 28px;
             display: flex;
             flex-direction: column;
+            padding: 30px;
+            text-align: center;
+            background: var(--card);
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.03);
             justify-content: center;
             align-items: center;
-            padding: 30px;
-            box-sizing: border-box;
+        }
+
+        .card-front h2 { font-size: 2.2rem; color: var(--primary); margin: 0; }
+        .tap-hint { font-size: 0.75rem; color: var(--text-sub); margin-top: 20px; letter-spacing: 1px; text-transform: uppercase; }
+
+        .card-back { 
+            transform: rotateY(180deg); 
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+            border: 2px solid var(--primary);
+        }
+
+        .meaning-bn { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; }
+        .syn-box { background: rgba(79, 70, 229, 0.05); padding: 12px; border-radius: 12px; width: 100%; font-size: 0.9rem; margin-bottom: 15px; }
+        .example-box { font-size: 0.85rem; color: var(--text-sub); font-style: italic; border-top: 1px solid #E2E8F0; padding-top: 15px; width: 100%; }
+
+        /* --- Nav Controls --- */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .btn-nav {
+            background: var(--card);
+            border: none;
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            font-size: 1.2rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .btn-nav:active { transform: scale(0.92); background: #F1F5F9; }
+
+        .progress { font-weight: 700; color: var(--text-sub); font-size: 0.9rem; }
+
+        /* --- Quiz --- */
+        .quiz-card {
+            background: var(--card);
+            padding: 24px;
+            border-radius: 28px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .q-text { font-size: 1.2rem; font-weight: 700; margin-bottom: 24px; text-align: center; }
+        
+        .opt {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 18px;
+            border: 2px solid #F1F5F9;
             background: white;
-            text-align: center;
+            text-align: left;
+            transition: 0.2s;
+            cursor: pointer;
         }
 
-        .card-front { background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%); }
-        .card-front h2 { font-size: 32px; color: var(--primary); margin: 0; }
-        .tap-hint { font-size: 12px; color: #9CA3AF; margin-top: 20px; text-transform: uppercase; }
+        .opt .bn { display: block; font-weight: 700; font-size: 1rem; color: var(--text-main); }
+        .opt .syn { display: block; font-size: 0.75rem; color: var(--text-sub); margin-top: 2px; }
 
-        .card-back {
-            background: linear-gradient(135deg, #fff 0%, #ecfdf5 100%);
-            transform: rotateY(180deg);
-            border: 2px solid var(--secondary);
+        .opt.correct { background: #DCFCE7; border-color: var(--secondary); }
+        .opt.wrong { background: #FEE2E2; border-color: var(--danger); }
+
+        /* --- Bottom Nav --- */
+        nav.tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: var(--card);
+            display: flex;
+            border-top: 1px solid #E2E8F0;
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
-        .bn-meaning { font-size: 28px; font-weight: bold; color: var(--text); margin-bottom: 10px; }
-        .synonyms-box { background: rgba(255,255,255,0.6); padding: 10px; border-radius: 8px; color: #4B5563; font-size: 14px; margin-bottom: 10px; }
-        .example-box { font-size: 13px; font-style: italic; color: #6B7280; line-height: 1.4; }
+        .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-sub);
+            font-size: 0.7rem;
+            font-weight: 600;
+            gap: 4px;
+        }
 
-        .card-controls { display: flex; justify-content: space-between; align-items: center; }
-        .nav-btn { background: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 600; color: var(--primary); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); cursor: pointer; }
-        .progress-text { font-size: 14px; color: #6B7280; }
-
-        /* --- QUIZ --- */
-        .quiz-container { background: white; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        .quiz-question { font-size: 20px; margin-bottom: 25px; color: var(--text); }
-        .option-btn { width: 100%; background: white; border: 2px solid #E5E7EB; padding: 15px; margin-bottom: 10px; border-radius: 12px; text-align: left; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; }
-        .opt-bn { font-weight: bold; font-size: 16px; }
-        .opt-syn { font-size: 12px; color: #6B7280; margin-top: 2px;}
-        .option-btn.correct { background: #D1FAE5; border-color: var(--secondary); }
-        .option-btn.wrong { background: #FEE2E2; border-color: #EF4444; }
+        .tab-item.active { color: var(--primary); }
+        .tab-icon { font-size: 1.4rem; }
 
         .hidden { display: none !important; }
-        .empty-state { text-align: center; padding: 40px; color: #9CA3AF; }
+
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-sub);
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>WordSchool<span style="color:var(--text)">BD</span></h1>
-        <div class="streak-badge"><span>🔥</span><span id="streak-display">0 Days</span></div>
+        <div class="brand">WordSchoolBD</div>
+        <div class="streak-chip">🔥 <span id="streak-count">0</span> Days</div>
     </header>
 
-    <div class="app-container">
-        <div class="controls-card">
-            <div class="nav-tabs">
-                <button class="tab-btn active" onclick="setMode('study')">📖 Study</button>
-                <button class="tab-btn" onclick="setMode('quiz')">📝 Quiz</button>
-            </div>
-            <div class="selectors">
-                <select id="class-select" onchange="updateUnits()">
-                    <option value="">Class</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                </select>
-                <select id="unit-select" onchange="updateLessons()">
-                    <option value="">Unit</option>
-                </select>
-                <select id="lesson-select" onchange="loadContent()">
-                    <option value="">Lesson</option>
-                </select>
-            </div>
+    <main>
+        <!-- Selectors -->
+        <div class="selector-grid">
+            <select id="class-s" onchange="loadUnits()">
+                <option value="">Class</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+            <select id="unit-s" onchange="loadLessons()">
+                <option value="">Unit</option>
+            </select>
+            <select id="lesson-s" onchange="refreshContent()">
+                <option value="">Lesson</option>
+            </select>
         </div>
 
-        <!-- Study Mode -->
-        <div id="study-mode">
-            <div id="flashcard-area" class="hidden">
-                <div class="flashcard-container" onclick="flipCard()">
-                    <div class="flashcard" id="active-card">
+        <!-- Study Container -->
+        <div id="view-study">
+            <div id="study-active" class="hidden">
+                <div class="flashcard-wrapper" onclick="toggleFlip()">
+                    <div class="card" id="main-card">
                         <div class="card-face card-front">
-                            <h2 id="fc-en">Word</h2>
+                            <h2 id="disp-en">Word</h2>
                             <div class="tap-hint">Tap to flip</div>
                         </div>
                         <div class="card-face card-back">
-                            <div class="bn-meaning" id="fc-bn">অর্থ</div>
-                            <div class="synonyms-box" id="fc-syn-container">
-                                <strong>Synonym/Definition:</strong><br><span id="fc-syn">...</span>
+                            <div class="meaning-bn" id="disp-bn">অর্থ</div>
+                            <div class="syn-box">
+                                <strong>Meaning/Synonym:</strong><br>
+                                <span id="disp-syn">...</span>
                             </div>
-                            <div class="example-box" id="fc-ex-container">
-                                <strong>Example:</strong><br><span id="fc-ex">...</span>
+                            <div class="example-box">
+                                <strong>Example:</strong><br>
+                                <span id="disp-ex">...</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-controls">
-                    <button class="nav-btn" onclick="prevCard()">← Prev</button>
-                    <span class="progress-text" id="card-progress">0 / 0</span>
-                    <button class="nav-btn" onclick="nextCard()">Next →</button>
+                <div class="controls">
+                    <button class="btn-nav" onclick="doPrev()">←</button>
+                    <div class="progress"><span id="p-curr">0</span> / <span id="p-total">0</span></div>
+                    <button class="btn-nav" onclick="doNext()">→</button>
                 </div>
             </div>
-            <div id="study-empty" class="empty-state">Select Class, Unit & Lesson to start!</div>
+            <div id="study-empty" class="empty">Select Class/Unit/Lesson to start studying!</div>
         </div>
 
-        <!-- Quiz Mode -->
-        <div id="quiz-mode" class="hidden">
-            <div id="quiz-area" class="quiz-container hidden">
-                <div class="quiz-question" id="q-text">Question?</div>
-                <div id="options-list"></div>
-                <button id="next-q-btn" class="nav-btn hidden" style="width:100%; margin-top:20px; background:var(--primary); color:white" onclick="nextQuizQuestion()">Next Question</button>
+        <!-- Quiz Container -->
+        <div id="view-quiz" class="hidden">
+            <div id="quiz-active" class="quiz-card hidden">
+                <div class="q-text" id="q-prompt">...</div>
+                <div id="options-box"></div>
+                <button id="btn-next-q" class="hidden" style="width:100%; padding:18px; border-radius:18px; background:var(--primary); color:white; border:none; margin-top:15px; font-weight:700; font-family:inherit;" onclick="setupQ()">Next Question</button>
             </div>
-            <div id="quiz-empty" class="empty-state">Select Class, Unit & Lesson for Quiz!</div>
+            <div id="quiz-empty" class="empty">Choose a lesson to begin the quiz!</div>
         </div>
-    </div>
+    </main>
 
-    <!-- Import our Database File -->
+    <nav class="tab-bar">
+        <div class="tab-item active" id="tab-study" onclick="setMode('study')">
+            <span class="tab-icon">📖</span>
+            <span>Study</span>
+        </div>
+        <div class="tab-item" id="tab-quiz" onclick="setMode('quiz')">
+            <span class="tab-icon">📝</span>
+            <span>Quiz</span>
+        </div>
+    </nav>
+
+    <!-- Linking to separate database file -->
     <script src="database.js"></script>
 
     <script>
         let currentMode = 'study';
-        let currentList = [];
-        let cardIndex = 0;
-        let currentQuizItem = null;
+        let dataList = [];
+        let dataIndex = 0;
+        let quizTarget = null;
 
-        function updateUnits() {
-            const cls = document.getElementById('class-select').value;
-            const unitSelect = document.getElementById('unit-select');
-            unitSelect.innerHTML = '<option value="">Unit</option>';
-            document.getElementById('lesson-select').innerHTML = '<option value="">Lesson</option>';
-            
-            if (vocabDatabase[cls]) {
-                Object.keys(vocabDatabase[cls]).forEach(u => {
-                    unitSelect.innerHTML += `<option value="${u}">${u}</option>`;
+        function loadUnits() {
+            const cls = document.getElementById('class-s').value;
+            const u = document.getElementById('unit-s');
+            u.innerHTML = '<option value="">Unit</option>';
+            document.getElementById('lesson-s').innerHTML = '<option value="">Lesson</option>';
+            if(vocabDatabase[cls]) {
+                Object.keys(vocabDatabase[cls]).forEach(unit => {
+                    u.innerHTML += `<option value="${unit}">${unit}</option>`;
                 });
             }
         }
 
-        function updateLessons() {
-            const cls = document.getElementById('class-select').value;
-            const unit = document.getElementById('unit-select').value;
-            const lsnSelect = document.getElementById('lesson-select');
-            lsnSelect.innerHTML = '<option value="">Lesson</option>';
-            
-            if (vocabDatabase[cls] && vocabDatabase[cls][unit]) {
-                Object.keys(vocabDatabase[cls][unit]).forEach(l => {
-                    lsnSelect.innerHTML += `<option value="${l}">${l}</option>`;
+        function loadLessons() {
+            const cls = document.getElementById('class-s').value;
+            const unit = document.getElementById('unit-s').value;
+            const l = document.getElementById('lesson-s');
+            l.innerHTML = '<option value="">Lesson</option>';
+            if(vocabDatabase[cls] && vocabDatabase[cls][unit]) {
+                Object.keys(vocabDatabase[cls][unit]).forEach(lsn => {
+                    l.innerHTML += `<option value="${lsn}">${lsn}</option>`;
                 });
             }
         }
 
-        function loadContent() {
-            const cls = document.getElementById('class-select').value;
-            const unit = document.getElementById('unit-select').value;
-            const lsn = document.getElementById('lesson-select').value;
-            
-            if (!cls || !unit || !lsn) return;
+        function refreshContent() {
+            const cls = document.getElementById('class-s').value;
+            const unit = document.getElementById('unit-s').value;
+            const lsn = document.getElementById('lesson-s').value;
+            if(!cls || !unit || !lsn) return;
 
-            currentList = vocabDatabase[cls][unit][lsn];
+            dataList = vocabDatabase[cls][unit][lsn];
+            dataIndex = 0;
 
-            if (currentMode === 'study') setupFlashcards();
-            else setupQuiz();
+            if(currentMode === 'study') initStudy();
+            else initQuiz();
         }
 
-        function setMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('study-mode').classList.toggle('hidden', mode !== 'study');
-            document.getElementById('quiz-mode').classList.toggle('hidden', mode !== 'quiz');
-            loadContent();
+        function setMode(m) {
+            currentMode = m;
+            document.getElementById('tab-study').classList.toggle('active', m === 'study');
+            document.getElementById('tab-quiz').classList.toggle('active', m === 'quiz');
+            document.getElementById('view-study').classList.toggle('hidden', m !== 'study');
+            document.getElementById('view-quiz').classList.toggle('hidden', m !== 'quiz');
+            refreshContent();
         }
 
-        function setupFlashcards() {
+        function initStudy() {
             document.getElementById('study-empty').classList.add('hidden');
-            document.getElementById('flashcard-area').classList.remove('hidden');
-            cardIndex = 0;
-            renderCard();
+            document.getElementById('study-active').classList.remove('hidden');
+            showCard();
         }
 
-        function renderCard() {
-            const item = currentList[cardIndex];
-            const card = document.getElementById('active-card');
-            card.classList.remove('flipped');
+        function showCard() {
+            const item = dataList[dataIndex];
+            const card = document.getElementById('main-card');
+            card.classList.remove('is-flipped');
+            
             setTimeout(() => {
-                document.getElementById('fc-en').innerText = item.en;
-                document.getElementById('fc-bn').innerText = item.bn;
-                document.getElementById('fc-syn').innerText = item.syn || "N/A";
-                document.getElementById('fc-ex').innerText = item.ex || "No example provided.";
-                document.getElementById('card-progress').innerText = `${cardIndex + 1} / ${currentList.length}`;
+                document.getElementById('disp-en').innerText = item.en;
+                document.getElementById('disp-bn').innerText = item.bn;
+                document.getElementById('disp-syn').innerText = item.syn;
+                document.getElementById('disp-ex').innerText = item.ex;
+                document.getElementById('p-curr').innerText = dataIndex + 1;
+                document.getElementById('p-total').innerText = dataList.length;
             }, 150);
         }
 
-        function flipCard() { 
-            document.getElementById('active-card').classList.toggle('flipped'); 
-            recordActivity();
+        function toggleFlip() {
+            document.getElementById('main-card').classList.toggle('is-flipped');
+            logActivity();
         }
 
-        function nextCard() { if (cardIndex < currentList.length - 1) { cardIndex++; renderCard(); } }
-        function prevCard() { if (cardIndex > 0) { cardIndex--; renderCard(); } }
+        function doNext() { if(dataIndex < dataList.length - 1) { dataIndex++; showCard(); } }
+        function doPrev() { if(dataIndex > 0) { dataIndex--; showCard(); } }
 
-        function setupQuiz() {
+        function initQuiz() {
             document.getElementById('quiz-empty').classList.add('hidden');
-            document.getElementById('quiz-area').classList.remove('hidden');
-            nextQuizQuestion();
+            document.getElementById('quiz-active').classList.remove('hidden');
+            setupQ();
         }
 
-        function nextQuizQuestion() {
-            document.getElementById('next-q-btn').classList.add('hidden');
-            const item = currentList[Math.floor(Math.random() * currentList.length)];
-            currentQuizItem = item;
-            document.getElementById('q-text').innerHTML = `Meaning of: <strong>${item.en}</strong>`;
+        function setupQ() {
+            document.getElementById('btn-next-q').classList.add('hidden');
+            quizTarget = dataList[Math.floor(Math.random() * dataList.length)];
+            document.getElementById('q-prompt').innerHTML = `Meaning of <span style="color:var(--primary)">${quizTarget.en}</span>?`;
             
-            let options = [item];
-            let others = currentList.filter(i => i.en !== item.en).sort(() => Math.random() - 0.5).slice(0, 3);
-            options = options.concat(others).sort(() => Math.random() - 0.5);
+            let options = [quizTarget];
+            let pool = dataList.filter(i => i.en !== quizTarget.en).sort(() => Math.random() - 0.5).slice(0, 3);
+            options = options.concat(pool).sort(() => Math.random() - 0.5);
 
-            const container = document.getElementById('options-list');
-            container.innerHTML = '';
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerHTML = `<span class="opt-bn">${opt.bn}</span><span class="opt-syn">(${opt.syn || '...'})</span>`;
-                btn.onclick = () => {
-                    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-                    if(opt.en === currentQuizItem.en) { btn.classList.add('correct'); recordActivity(); }
-                    else { btn.classList.add('wrong'); }
-                    document.getElementById('next-q-btn').classList.remove('hidden');
+            const box = document.getElementById('options-box');
+            box.innerHTML = '';
+            options.forEach(o => {
+                const b = document.createElement('button');
+                b.className = 'opt';
+                b.innerHTML = `<span class="bn">${o.bn}</span><span class="syn">(${o.syn})</span>`;
+                b.onclick = () => {
+                    document.querySelectorAll('.opt').forEach(btn => btn.style.pointerEvents = 'none');
+                    if(o.en === quizTarget.en) {
+                        b.classList.add('correct');
+                        logActivity();
+                    } else {
+                        b.classList.add('wrong');
+                        document.querySelectorAll('.opt').forEach(btn => {
+                            if(btn.innerHTML.includes(quizTarget.bn)) btn.classList.add('correct');
+                        });
+                    }
+                    document.getElementById('btn-next-q').classList.remove('hidden');
                 };
-                container.appendChild(btn);
+                box.appendChild(b);
             });
         }
 
-        function recordActivity() {
+        function logActivity() {
             const today = new Date().toDateString();
-            const lastDate = localStorage.getItem('wsb_last_date');
-            if (lastDate !== today) {
-                let streak = parseInt(localStorage.getItem('wsb_streak') || 0);
-                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-                streak = (lastDate === yesterday.toDateString()) ? streak + 1 : 1;
-                localStorage.setItem('wsb_streak', streak);
-                localStorage.setItem('wsb_last_date', today);
-                updateStreakDisplay();
+            const last = localStorage.getItem('wsb_date');
+            if(last !== today) {
+                let s = parseInt(localStorage.getItem('wsb_streak') || 0);
+                const yest = new Date(); yest.setDate(yest.getDate() - 1);
+                s = (last === yest.toDateString()) ? s + 1 : 1;
+                localStorage.setItem('wsb_streak', s);
+                localStorage.setItem('wsb_date', today);
+                refreshStreak();
             }
         }
 
-        function updateStreakDisplay() {
-            const s = localStorage.getItem('wsb_streak') || 0;
-            document.getElementById('streak-display').innerText = `${s} Days`;
+        function refreshStreak() {
+            document.getElementById('streak-count').innerText = localStorage.getItem('wsb_streak') || 0;
         }
-        
-        window.onload = updateStreakDisplay;
+
+        window.onload = refreshStreak;
     </script>
 </body>
 </html>
